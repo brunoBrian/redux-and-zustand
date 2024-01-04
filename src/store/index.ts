@@ -3,16 +3,11 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
 
-const todoSlice = createSlice({
-  name: "todo",
-  initialState: [],
-
-  reducers: {},
-});
+import { player } from "./slices/player";
 
 export const store = configureStore({
   reducer: {
-    todo: todoSlice.reducer,
+    player,
   },
 });
 
