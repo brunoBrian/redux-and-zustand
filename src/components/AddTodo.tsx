@@ -1,14 +1,24 @@
 "use client";
 
+import { add } from "@/store";
 import { FormEvent, useState } from "react";
 
+import { useDispatch } from "react-redux";
+
 export function AddTodo() {
+  const dispatch = useDispatch();
   const [newTodo, setNewTodo] = useState("");
 
   function handleNewTodo(e: FormEvent) {
     e.preventDefault();
 
-    console.log(newTodo);
+    dispatch(
+      add({
+        newTodo,
+      })
+    );
+
+    setNewTodo("");
   }
 
   return (
