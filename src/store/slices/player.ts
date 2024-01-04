@@ -1,5 +1,6 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useAppSelector } from "..";
+import { getCourse } from "@/services/courses";
 
 interface Course {
   id: number;
@@ -18,13 +19,21 @@ export interface PlayerState {
   course: Course | null;
   currentModuleIndex: number;
   currentLessonIndex: number;
+  isLoading: boolean;
 }
 
 const initialState: PlayerState = {
   course: null,
   currentModuleIndex: 0,
   currentLessonIndex: 0,
+  isLoading: false,
 };
+
+export const loadCourse = createAsyncThunk("player/load", async () => {
+  const data = await getCourse(1);
+
+  return data;
+});
 
 const playerSlice = createSlice({
   name: "player",
@@ -57,10 +66,19 @@ const playerSlice = createSlice({
       }
     },
   },
+  extraReducers(builder) {
+    builder.addCase(loadCourse.pending, (state) => {
+      state.isLoading = true;
+    }),
+      builder.addCase(loadCourse.fulfilled, (state, action) => {
+        state.course = action.payload;
+        state.isLoading = false;
+      });
+  },
 });
 
 export const player = playerSlice.reducer;
-export const { play, next, start } = playerSlice.actions;
+export const { play, next } = playerSlice.actions;
 
 export const useCurrentLesson = () => {
   return useAppSelector((state) => {
