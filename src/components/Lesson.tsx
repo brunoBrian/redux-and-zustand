@@ -6,7 +6,6 @@ interface LessonProps {
   onPlay: () => void;
   isCurrent?: boolean;
 }
-
 export function Lesson({
   title,
   duration,
